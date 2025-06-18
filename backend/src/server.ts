@@ -1,4 +1,6 @@
 import express from "express";
+import session from 'express-session';
+import passport from './config/passport'; 
 import cors from "cors";
 import bodyParser from 'body-parser';
 import authRoutes from "./routes/auth"; // ✅ you are importing the router
@@ -15,6 +17,17 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/home", homeRoutes);
 app.use("/api/users", userRoutes);
+
+app.use(
+  session({
+    secret: 'your-session-secret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.listen(5000, () => {
   console.log('Server running on http://localhost:5000');

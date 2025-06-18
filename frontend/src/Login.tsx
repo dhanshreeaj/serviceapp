@@ -39,6 +39,7 @@ const Login: React.FC = () => {
       alert(err?.response?.data?.message || "Login failed");
     }
   };
+  
 
   return (
     <div
@@ -115,6 +116,25 @@ const Login: React.FC = () => {
         >
           Login
         </button>
+
+        <button
+  type="button"
+  onClick={() => window.location.href = "http://localhost:5000/api/auth/google"}
+  style={{
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#4285F4",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontWeight: "bold",
+    fontSize: "16px",
+    cursor: "pointer",
+    marginTop: "10px",
+  }}
+>
+  Sign in with Google
+</button>
 
         <button
           type="button"
