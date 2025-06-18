@@ -7,38 +7,38 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
 
- const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", {
-      email,
-      password,
-    });
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
 
-    const token = res.data.token;
-    const role = res.data.role; // ✅ get role from response
+      const { token, role } = res.data;
 
-    if (!token || !role) {
-      alert("Login failed: Missing token or role.");
-      return;
+      if (!token || !role) {
+        alert("Login failed: Missing token or role.");
+        return;
+      }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+
+      alert(`Login successful as ${role}`);
+
+      // 🔀 Redirect based on role
+      if (role === "admin") {
+        navigate("/adminhome");
+      } else {
+        navigate("/home");
+      }
+    } catch (err: any) {
+      console.error("Login error:", err?.response?.data);
+      alert(err?.response?.data?.message || "Login failed");
     }
-
-    alert(`Login successful as ${role}\nToken:\n${token}`);
-    localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
-
-    // ✅ Redirect based on role
-    if (role === "admin") {
-      navigate("/adminhome");
-    } else {
-      navigate("/home");
-    }
-  } catch (err: any) {
-    console.error(err?.response?.data);
-    alert(err?.response?.data?.error || "Login failed");
-  }
-};
+  };
 
   return (
     <div
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(to bottom, skyblue, #f9f9f9)", // 🎨 vertical gradient
+        background: "linear-gradient(to bottom, skyblue, #f9f9f9)",
         flexDirection: "column",
       }}
     >
@@ -103,7 +103,7 @@ const Login: React.FC = () => {
           style={{
             width: "100%",
             padding: "12px",
-            backgroundColor:"skyblue",
+            backgroundColor: "skyblue",
             color: "#fff",
             border: "none",
             borderRadius: "8px",
@@ -111,7 +111,6 @@ const Login: React.FC = () => {
             fontSize: "16px",
             cursor: "pointer",
             marginBottom: "10px",
-            transition: "background-color 0.3s ease",
           }}
         >
           Login
@@ -123,14 +122,13 @@ const Login: React.FC = () => {
           style={{
             width: "100%",
             padding: "12px",
-            backgroundColor: 'skyblue',
+            backgroundColor: "skyblue",
             color: "#fff",
             border: "none",
             borderRadius: "8px",
             fontWeight: "bold",
             fontSize: "16px",
             cursor: "pointer",
-            transition: "background-color 0.3s ease",
           }}
         >
           Register
