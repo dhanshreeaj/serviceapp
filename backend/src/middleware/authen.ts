@@ -7,7 +7,7 @@ export interface AuthenticatedRequest extends Request {
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
 
-export const authenticateToken = (
+const authenticate = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
@@ -22,10 +22,12 @@ export const authenticateToken = (
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
-    req.user = decoded;
+    req.user = decoded; // 👈 important
     next();
   } catch (err) {
     res.status(403).json({ error: "Invalid token" });
-    return;
   }
 };
+
+
+export default authenticate;
